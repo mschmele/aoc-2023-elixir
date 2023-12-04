@@ -2,7 +2,7 @@ defmodule Cubes do
   def parse_single_game(game) do
     game
     |> String.split(",", trim: true)
-    |> Enum.map(fn x ->  x |> String.split() |> Enum.reverse() end)
+    |> Enum.map(fn x -> x |> String.split() |> Enum.reverse() end)
   end
 
   def input_line_to_struct(line) do
