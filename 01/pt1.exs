@@ -18,7 +18,7 @@ defmodule Trebuchet do
   # .'__/____/___________________`._____` .'.'
   # |____________________________________|.' LGB
 
-  def remove_letters(lines) do
+  def lines_to_calibration_values(lines) do
     Enum.map(
       lines,
       fn line ->
@@ -40,13 +40,13 @@ defmodule Trebuchet do
     )
   end
 
-  def parse_input(path) do
+  def calibrate_the_treb(path) do
     path
     |> File.read!()
     |> String.split("\n", trim: true)
-    |> remove_letters
+    |> lines_to_calibration_values
     |> Enum.sum()
   end
 end
 
-IO.puts(Trebuchet.parse_input("input1.txt"))
+IO.puts(Trebuchet.calibrate_the_treb("input1.txt"))
