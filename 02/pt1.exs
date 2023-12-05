@@ -2,25 +2,33 @@ defmodule Cubes do
   def parse_single_game(game) do
     game
     |> String.split(",", trim: true)
-    |> Enum.map(fn x -> x |> String.split() |> Enum.reverse() end)
+    |> Enum.map(fn x ->
+      x |> String.split() |> Enum.reverse() |> List.to_tuple()
+    end)
+    |> List.flatten()
+  end
+
+  def get_max_color(results, color) do
+    filtered_results = Enum.filter(results, fn result -> result.key == color end)
+
+    results
   end
 
   def input_line_to_struct(line) do
-    game_number =
-      line
-      |> String.split(":", trim: true)
-      |> Enum.at(0)
-      |> String.replace(~r/[^\d]/, "")
+    [number, results] = String.split(line, ":", trim: true)
 
-    game_results =
-      line
-      |> String.split(":", trim: true)
-      |> Enum.at(1)
+    processed_results =
+      results
       |> String.split(";", trim: true)
-      |> Enum.map(fn game -> parse_single_game(game) end)
+      |> Enum.join(",")
+      |> parse_single_game()
 
-    dbg()
-    games = %{game_number: game_number, game_results: game_results}
+    %{
+      game_number: number |> String.replace(~r/[^\d]/, ""),
+      max_red: get_max_color(processed_results, "red"),
+      max_green: get_max_color(processed_results, "green"),
+      max_blue: get_max_color(processed_results, "blue")
+    }
   end
 
   def parse_games(file) do
@@ -31,10 +39,9 @@ defmodule Cubes do
   end
 
   def analyze_games_from_file(file) do
-    parse_games(file)
-
-    # TODO: this fn :)
+    games = parse_games(file)
+    dbg()
   end
 end
 
-IO.puts(Cubes.analyze_games_from_file("smallinput.txt"))
+Cubes.analyze_games_from_file("smallinput.txt")
