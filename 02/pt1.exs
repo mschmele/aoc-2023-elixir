@@ -35,7 +35,6 @@ defmodule Cubes do
     |> File.read!()
     |> String.split("\n", trim: true)
     |> Enum.map(fn line -> input_line_to_struct(line) end)
-    |> dbg
   end
 
   def analyze_games_from_file(file) do
