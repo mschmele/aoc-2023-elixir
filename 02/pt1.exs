@@ -2,7 +2,7 @@ defmodule Cubes do
   def parse_single_game(game) do
     game
     |> String.split(",", trim: true)
-    |> Enum.map(fn x -> String.split(x) end)
+    |> Enum.map(&String.split/1)
     |> Enum.into([], fn [left, right] -> %{num: String.to_integer(left), color: right} end)
   end
 
@@ -10,7 +10,7 @@ defmodule Cubes do
     results
     |> List.flatten()
     |> Enum.filter(fn result -> Map.get(result, :color) == color end)
-    |> Enum.map(fn x -> Map.get(x, :num) end)
+    |> Enum.map(fn x -> x.num end)
     |> Enum.max()
   end
 
@@ -20,7 +20,7 @@ defmodule Cubes do
     processed_results =
       results
       |> String.split(";", trim: true)
-      |> Enum.map(fn result -> parse_single_game(result) end)
+      |> Enum.map(&parse_single_game/1)
 
     %{
       game_number: number |> String.replace(~r/[^\d]/, "") |> String.to_integer(),
@@ -34,7 +34,7 @@ defmodule Cubes do
     file
     |> File.read!()
     |> String.split("\n", trim: true)
-    |> Enum.map(fn line -> input_line_to_struct(line) end)
+    |> Enum.map(&input_line_to_struct/1)
   end
 
   def analyze_games_from_file(file) do
@@ -52,6 +52,8 @@ defmodule Cubes do
       end)
 
     id_sum = Enum.reduce(possible_games, 0, fn x, acc -> x.game_number + acc end)
+
+    dbg()
 
     %{possible_games: possible_games, sum: id_sum}
   end
