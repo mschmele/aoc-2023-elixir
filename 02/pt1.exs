@@ -41,10 +41,10 @@ defmodule Cubes do
     red = 12
     green = 13
     blue = 14
-    games = parse_games(file)
 
     possible_games =
-      games
+      file
+      |> parse_games()
       |> Enum.filter(fn game ->
         game.max_red <= red &&
           game.max_green <= green &&
@@ -53,10 +53,7 @@ defmodule Cubes do
 
     id_sum = Enum.reduce(possible_games, 0, fn x, acc -> x.game_number + acc end)
 
-    %{
-      possible_games: possible_games,
-      sum: id_sum
-    }
+    %{possible_games: possible_games, sum: id_sum}
   end
 end
 
